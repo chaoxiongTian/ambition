@@ -3,7 +3,7 @@
  */
 object Version {
     //base
-    const val compileSdk = 33
+    const val compileSdk = 34
     const val minSdk = 22
     const val targetSdk = 33
     const val versionCode = 1
