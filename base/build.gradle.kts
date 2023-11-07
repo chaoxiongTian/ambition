@@ -5,10 +5,10 @@ plugins {
 
 android {
     namespace = "com.hero.base"
-    compileSdk = 33
+    compileSdk = Version.compileSdk
 
     defaultConfig {
-        minSdk = 22
+        minSdk = Version.minSdk
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -30,11 +30,17 @@ android {
 }
 
 dependencies {
-
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.10.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    // Foundation
+    implementation("androidx.appcompat:appcompat:${Version.appcompat}")
+    implementation("com.google.code.gson:gson:${Version.gson}")
+    // Architecture:
+    // UI
+    implementation("com.google.android.material:material:${Version.material}")
+    // Behavior
+    // KTX
+    implementation("androidx.core:core-ktx:${Version.core_ktx}")
+    // Test
+    testImplementation("junit:junit:${Version.junit}")
+    androidTestImplementation("androidx.test.ext:junit:${Version.ext_junit}")
+    androidTestImplementation("androidx.test.espresso:espresso-core:${Version.espresso_core}")
 }

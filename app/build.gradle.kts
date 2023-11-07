@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.hero.ambition"
-    compileSdk = 33
+    compileSdk = Version.compileSdk
 
     defaultConfig {
         applicationId = "com.hero.ambition"
-        minSdk = 22
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = Version.minSdk
+        targetSdk = Version.targetSdk
+        versionCode = Version.versionCode
+        versionName = Version.versionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -37,20 +37,20 @@ android {
 
 dependencies {
     // Foundation
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    // Architecture:
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.appcompat:appcompat:${Version.appcompat}")
+    // Architecture
     // UI
-    implementation("com.google.android.material:material:1.10.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("com.google.android.material:material:${Version.material}")
+    implementation("androidx.constraintlayout:constraintlayout:${Version.constraintlayout}")
     // Behavior
     // KTX
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Version.livedata_ktx}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.viewmodel_ktx}")
+    implementation("androidx.core:core-ktx:${Version.core_ktx}")
+    implementation("androidx.navigation:navigation-ui-ktx:${Version.navigation_ui_ktx}")
+    implementation("androidx.navigation:navigation-fragment-ktx:${Version.navigation_fragment_ktx}")
     // Test
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("junit:junit:${Version.junit}")
+    androidTestImplementation("androidx.test.ext:junit:${Version.ext_junit}")
+    androidTestImplementation("androidx.test.espresso:espresso-core:${Version.espresso_core}")
 }
