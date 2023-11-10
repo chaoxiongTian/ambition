@@ -38,6 +38,8 @@ android {
 dependencies {
     // Foundation
     implementation("androidx.appcompat:appcompat:${Version.appcompat}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutine_android}")
+
     // Architecture
     // UI
     implementation("com.google.android.material:material:${Version.material}")

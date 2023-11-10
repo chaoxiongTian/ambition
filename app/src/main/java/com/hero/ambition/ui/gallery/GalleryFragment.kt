@@ -8,8 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.hero.ambition.databinding.FragmentGalleryBinding
+import com.hero.ambition.ui.BaseFragment
 
-class GalleryFragment : Fragment() {
+class GalleryFragment : BaseFragment() {
 
     private var _binding: FragmentGalleryBinding? = null
 
