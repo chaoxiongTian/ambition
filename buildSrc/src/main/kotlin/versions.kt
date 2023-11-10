@@ -11,6 +11,7 @@ object Version {
 
     // Foundation
     const val appcompat = "1.6.1"
+    const val coroutine_android = "1.7.3"
     // Architecture
     // UI
     const val material = "1.10.0"
