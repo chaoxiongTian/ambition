@@ -41,16 +41,25 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutine_android}")
 
     // Architecture
+
     // UI
     implementation("com.google.android.material:material:${Version.material}")
     implementation("androidx.constraintlayout:constraintlayout:${Version.constraintlayout}")
+
     // Behavior
+
     // KTX
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Version.livedata_ktx}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Version.viewmodel_ktx}")
     implementation("androidx.core:core-ktx:${Version.core_ktx}")
     implementation("androidx.navigation:navigation-ui-ktx:${Version.navigation_ui_ktx}")
     implementation("androidx.navigation:navigation-fragment-ktx:${Version.navigation_fragment_ktx}")
+
+    // ThirdPart
+    implementation("com.guolindev.permissionx:permissionx:${Version.permissionx}")
+    implementation("com.orhanobut:logger:${Version.logger}")
+
+
     // Test
     testImplementation("junit:junit:${Version.junit}")
     androidTestImplementation("androidx.test.ext:junit:${Version.ext_junit}")

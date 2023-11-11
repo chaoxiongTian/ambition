@@ -29,5 +29,6 @@ object Version {
     const val espresso_core = "3.5.1"
     // Third-part
     const val gson = "2.9.1"
-
+    const val permissionx = "1.7.1"
+    const val logger = "2.2.0"
 }
