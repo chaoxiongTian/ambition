@@ -5,6 +5,8 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import com.hero.base.app
+import com.hero.base.log.alogi
+import com.hero.base.log.alogw
 
 /**
  * it is used to hold key activity and collect statistics on activity.
@@ -20,40 +22,40 @@ object ActivityHelper {
     private var activityRecord = mutableListOf<String>()
     private val register = object : Application.ActivityLifecycleCallbacks {
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-            com.hero.base.log.alogi(
+            alogi(
                 TAG, "onActivityCreated: ${recodeName(activity)}, savedInstanceState: $savedInstanceState"
             )
             activityRecord.add(recodeName(activity))
         }
 
         override fun onActivityStarted(activity: Activity) {
-            com.hero.base.log.alogi(TAG, "onActivityStarted: ${recodeName(activity)}")
+            alogi(TAG, "onActivityStarted: ${recodeName(activity)}")
         }
 
         override fun onActivityResumed(activity: Activity) {
-            com.hero.base.log.alogi(TAG, "onActivityResumed: ${recodeName(activity)}")
+            alogi(TAG, "onActivityResumed: ${recodeName(activity)}")
             resumedActivity = activity
         }
 
         override fun onActivityPaused(activity: Activity) {
-            com.hero.base.log.alogi(TAG, "onActivityPaused: ${recodeName(activity)}")
+            alogi(TAG, "onActivityPaused: ${recodeName(activity)}")
             if (resumedActivity == activity) {
                 resumedActivity = null
             } else {
-                com.hero.base.log.alogw(TAG, "topActivity is not record")
+                alogw(TAG, "topActivity is not record")
             }
         }
 
         override fun onActivityStopped(activity: Activity) {
-            com.hero.base.log.alogi(TAG, "onActivityStopped: ${recodeName(activity)}")
+            alogi(TAG, "onActivityStopped: ${recodeName(activity)}")
         }
 
         override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-            com.hero.base.log.alogi(TAG, "onActivitySaveInstanceState: ${recodeName(activity)}")
+            alogi(TAG, "onActivitySaveInstanceState: ${recodeName(activity)}")
         }
 
         override fun onActivityDestroyed(activity: Activity) {
-            com.hero.base.log.alogi(TAG, "onActivityDestroyed: ${recodeName(activity)}")
+            alogi(TAG, "onActivityDestroyed: ${recodeName(activity)}")
             activityRecord.remove(recodeName(activity))
         }
     }
