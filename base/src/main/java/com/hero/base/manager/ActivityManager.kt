@@ -19,17 +19,19 @@ object ActivityHelper {
     private var resumedActivity: Activity? = null
 
     // record activity info use string list.
-    private var activityRecord = mutableListOf<String>()
+    private var createActivityRecord = mutableListOf<String>()
+    private var startActivityRecord = mutableListOf<String>()
     private val register = object : Application.ActivityLifecycleCallbacks {
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             alogi(
                 TAG, "onActivityCreated: ${recodeName(activity)}, savedInstanceState: $savedInstanceState"
             )
-            activityRecord.add(recodeName(activity))
+            createActivityRecord.add(recodeName(activity))
         }
 
         override fun onActivityStarted(activity: Activity) {
             alogi(TAG, "onActivityStarted: ${recodeName(activity)}")
+            startActivityRecord.add(recodeName(activity))
         }
 
         override fun onActivityResumed(activity: Activity) {
@@ -44,6 +46,7 @@ object ActivityHelper {
             } else {
                 alogw(TAG, "topActivity is not record")
             }
+            startActivityRecord.remove(recodeName(activity))
         }
 
         override fun onActivityStopped(activity: Activity) {
@@ -56,7 +59,7 @@ object ActivityHelper {
 
         override fun onActivityDestroyed(activity: Activity) {
             alogi(TAG, "onActivityDestroyed: ${recodeName(activity)}")
-            activityRecord.remove(recodeName(activity))
+            createActivityRecord.remove(recodeName(activity))
         }
     }
 
