@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import com.hero.base.log.ALog
 import com.hero.base.log.alogi
-import com.hero.base.manager.ActivityHelper
+import com.hero.base.manager.ActivityRecord
 import com.permissionx.guolindev.PermissionX
 
 
@@ -24,7 +24,7 @@ object AppBootstrap {
     fun applicationOnCreate(application: Application) {
         initLogger(application)
         alogi(TAG, "applicationOnCreate")
-        ActivityHelper.register()
+        ActivityRecord.register()
         alogi(TAG, "applicationOnCreate end")
     }
 

@@ -21,36 +21,36 @@ import java.io.IOException
 /**
  * fun to be easy to use.
  */
-fun alogd(message: String, vararg args: Any) = ALog.d(message, args)
+fun alogd(message: String) = ALog.d(message)
 
-fun alogd(tag: String, message: String, vararg args: Any) = ALog.d(tag, message, args)
+fun alogd(tag: String, message: String) = ALog.d(tag, message)
 
 fun alogd(message: Any) = ALog.d(message)
 
 fun alogd(tag: String, message: Any) = ALog.d(tag, message)
 
-fun aloge(message: String, vararg args: Any) = ALog.e(message, args)
+fun aloge(message: String) = ALog.e(message)
 
-fun aloge(tag: String, message: String, vararg args: Any) = ALog.e(tag, message, args)
+fun aloge(tag: String, message: String) = ALog.e(tag, message)
 
-fun aloge(throwable: Throwable, message: String, vararg args: Any) = ALog.e(throwable, message, args)
+fun aloge(throwable: Throwable, message: String) = ALog.e(throwable, message)
 
-fun aloge(tag: String, throwable: Throwable, message: String, vararg args: Any) = ALog.e(tag, throwable, message, args)
-fun alogw(message: String, vararg args: Any) = ALog.w(message, args)
+fun aloge(tag: String, throwable: Throwable, message: String) = ALog.e(tag, throwable, message)
+fun alogw(message: String) = ALog.w(message)
 
-fun alogw(tag: String, message: String, vararg args: Any) = ALog.w(tag, message, args)
+fun alogw(tag: String, message: String) = ALog.w(tag, message)
 
-fun alogi(message: String, vararg args: Any) = ALog.i(message, args)
+fun alogi(message: String) = ALog.i(message)
 
-fun alogi(tag: String, message: String, vararg args: Any) = ALog.i(tag, message, args)
+fun alogi(tag: String, message: String) = ALog.i(tag, message)
 
-fun alogv(message: String, vararg args: Any) = ALog.v(message, args)
+fun alogv(message: String) = ALog.v(message)
 
-fun alogv(tag: String, message: String, vararg args: Any) = ALog.v(tag, message, args)
+fun alogv(tag: String, message: String) = ALog.v(tag, message)
 
-fun alogwtf(message: String, vararg args: Any) = ALog.wtf(message, args)
+fun alogwtf(message: String) = ALog.wtf(message)
 
-fun alogwtf(tag: String, message: String, vararg args: Any) = ALog.wtf(tag, message, args)
+fun alogwtf(tag: String, message: String) = ALog.wtf(tag, message)
 
 fun alogjson(json: String) = ALog.json(json)
 
