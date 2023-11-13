@@ -37,6 +37,7 @@ android {
 
 dependencies {
     // Foundation
+    implementation(project(":base"))
     implementation("androidx.appcompat:appcompat:${Version.appcompat}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Version.coroutine_android}")
 
@@ -58,7 +59,6 @@ dependencies {
     // ThirdPart
     implementation("com.guolindev.permissionx:permissionx:${Version.permissionx}")
     implementation("com.orhanobut:logger:${Version.logger}")
-
 
     // Test
     testImplementation("junit:junit:${Version.junit}")

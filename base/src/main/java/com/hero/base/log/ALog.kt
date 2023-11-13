@@ -1,11 +1,11 @@
-package com.hero.ambition.coretools.log
+package com.hero.base.log
 
 import android.content.Context
 import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.os.Message
-import com.hero.ambition.coretools.log.WriteHandler.Companion.generateWriteHandler
+import com.hero.base.log.WriteHandler.Companion.generateWriteHandler
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.CsvFormatStrategy
 import com.orhanobut.logger.DiskLogAdapter
@@ -18,6 +18,47 @@ import java.io.File
 import java.io.FileWriter
 import java.io.IOException
 
+/**
+ * fun to be easy to use.
+ */
+fun alogd(message: String, vararg args: Any) = ALog.d(message, args)
+
+fun alogd(tag: String, message: String, vararg args: Any) = ALog.d(tag, message, args)
+
+fun alogd(message: Any) = ALog.d(message)
+
+fun alogd(tag: String, message: Any) = ALog.d(tag, message)
+
+fun aloge(message: String, vararg args: Any) = ALog.e(message, args)
+
+fun aloge(tag: String, message: String, vararg args: Any) = ALog.e(tag, message, args)
+
+fun aloge(throwable: Throwable, message: String, vararg args: Any) = ALog.e(throwable, message, args)
+
+fun aloge(tag: String, throwable: Throwable, message: String, vararg args: Any) = ALog.e(tag, throwable, message, args)
+fun alogw(message: String, vararg args: Any) = ALog.w(message, args)
+
+fun alogw(tag: String, message: String, vararg args: Any) = ALog.w(tag, message, args)
+
+fun alogi(message: String, vararg args: Any) = ALog.i(message, args)
+
+fun alogi(tag: String, message: String, vararg args: Any) = ALog.i(tag, message, args)
+
+fun alogv(message: String, vararg args: Any) = ALog.v(message, args)
+
+fun alogv(tag: String, message: String, vararg args: Any) = ALog.v(tag, message, args)
+
+fun alogwtf(message: String, vararg args: Any) = ALog.wtf(message, args)
+
+fun alogwtf(tag: String, message: String, vararg args: Any) = ALog.wtf(tag, message, args)
+
+fun alogjson(json: String) = ALog.json(json)
+
+fun alogjson(tag: String, json: String) = ALog.json(tag, json)
+
+fun alogxml(xml: String) = ALog.xml(xml)
+
+fun alogxml(tag: String, xml: String) = ALog.xml(tag, xml)
 
 /**
  * logger warp, to hide true implementation.
@@ -27,7 +68,7 @@ object ALog {
     private const val GLOBAL_TAG = "a-log"
     fun init(context: Context) {
         val formatStrategy: FormatStrategy = PrettyFormatStrategy.newBuilder()
-            .showThreadInfo(true) // (Optional) Whether to show thread info or not. Default true
+            .showThreadInfo(false) // (Optional) Whether to show thread info or not. Default true
             .methodCount(0) // (Optional) How many method line to show. Default 2
             .methodOffset(7) // (Optional) Hides internal method calls up to offset. Default 5
             .logStrategy(LogcatLogStrategy()) // (Optional) Changes the log strategy to print out. Default LogCat

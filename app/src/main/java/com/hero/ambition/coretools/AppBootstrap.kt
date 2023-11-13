@@ -6,7 +6,9 @@ import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
-import com.hero.ambition.coretools.log.ALog
+import com.hero.base.log.ALog
+import com.hero.base.log.alogi
+import com.hero.base.manager.ActivityHelper
 import com.permissionx.guolindev.PermissionX
 
 
@@ -14,15 +16,16 @@ import com.permissionx.guolindev.PermissionX
  * 归拢 app 部分事件的启动时机
  */
 object AppBootstrap {
+    private const val TAG = "AppBootstrapLog"
 
     /**
      * 应用刚启动的时候调用
      */
     fun applicationOnCreate(application: Application) {
         initLogger(application)
-        ALog.i( "AppBootstrap applicationOnCreate")
-
-        ALog.i("AppBootstrap applicationOnCreate end")
+        alogi(TAG, "applicationOnCreate")
+        ActivityHelper.register()
+        alogi(TAG, "applicationOnCreate end")
     }
 
     private fun initLogger(context: Context) {
@@ -30,24 +33,16 @@ object AppBootstrap {
     }
 
     /**
-     * 闪屏页刚启动的时候调用
-     */
-    fun splashOnCreate() {
-        ALog.i("AppBootstrap splashOnCreate")
-        ALog.i("AppBootstrap splashOnCreate end")
-    }
-
-    /**
      * 主页页刚启动的时候调用
      */
     fun mainActivityCreate(activity: Activity) {
-        ALog.i("AppBootstrap mainActivityCreate")
+        alogi(TAG, "mainActivityCreate")
         requestReadPermission(activity)
-        ALog.i("AppBootstrap mainActivityCreate end")
+        alogi(TAG, "mainActivityCreate end")
     }
 
     private fun requestReadPermission(activity: Activity) {
-        if(activity !is FragmentActivity){
+        if (activity !is FragmentActivity) {
             return
         }
         PermissionX.init(activity)

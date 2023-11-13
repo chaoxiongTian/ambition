@@ -32,13 +32,21 @@ android {
 dependencies {
     // Foundation
     implementation("androidx.appcompat:appcompat:${Version.appcompat}")
-    implementation("com.google.code.gson:gson:${Version.gson}")
+
     // Architecture:
+
     // UI
     implementation("com.google.android.material:material:${Version.material}")
+
     // Behavior
+
     // KTX
     implementation("androidx.core:core-ktx:${Version.core_ktx}")
+
+    // ThirdPart
+    implementation("com.orhanobut:logger:${Version.logger}")
+    implementation("com.google.code.gson:gson:${Version.gson}")
+
     // Test
     testImplementation("junit:junit:${Version.junit}")
     androidTestImplementation("androidx.test.ext:junit:${Version.ext_junit}")
