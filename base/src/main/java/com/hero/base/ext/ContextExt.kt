@@ -55,10 +55,11 @@ fun Context.getAppVersionCode(): Long {
     try {
         val info = manager.getPackageInfo(applicationContext.packageName, 0)
         if (info != null) {
-            return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P).then(
-                info.longVersionCode,
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                info.longVersionCode
+            } else {
                 info.versionCode.toLong()
-            )
+            }
         }
     } catch (e: PackageManager.NameNotFoundException) {
         e.printStackTrace()
