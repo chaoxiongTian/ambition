@@ -6,6 +6,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.hero.base.app
+import com.hero.base.ext.TAG
 import com.hero.base.log.alogi
 import com.hero.base.log.alogw
 
@@ -14,7 +15,6 @@ import com.hero.base.log.alogw
  */
 @SuppressLint("StaticFieldLeak")
 object ActivityRecord {
-    private const val TAG = "ActivityHelperLog"
 
     // resumed activity to easy use.
     private var resumedActivity: Activity? = null
@@ -27,7 +27,7 @@ object ActivityRecord {
     private val register = object : Application.ActivityLifecycleCallbacks {
         override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
             alogi(
-                TAG, "onActivityCreated: ${recodeName(activity)}, savedInstanceState: $savedInstanceState"
+                TAG(), "onActivityCreated: ${recodeName(activity)}, savedInstanceState: $savedInstanceState"
             )
             createActivityRecord.addFirst(recodeName(activity))
             if (activity !is FragmentActivity) {
@@ -37,43 +37,43 @@ object ActivityRecord {
         }
 
         override fun onActivityStarted(activity: Activity) {
-            alogi(TAG, "onActivityStarted: ${recodeName(activity)}")
+            alogi(TAG(), "onActivityStarted: ${recodeName(activity)}")
             startActivityRecord.addFirst(recodeName(activity))
         }
 
         override fun onActivityResumed(activity: Activity) {
-            alogi(TAG, "onActivityResumed: ${recodeName(activity)}")
+            alogi(TAG(), "onActivityResumed: ${recodeName(activity)}")
             resumedActivity = activity
         }
 
         override fun onActivityPaused(activity: Activity) {
-            alogi(TAG, "onActivityPaused: ${recodeName(activity)}")
+            alogi(TAG(), "onActivityPaused: ${recodeName(activity)}")
             if (resumedActivity == activity) {
                 resumedActivity = null
             } else {
-                alogw(TAG, "topActivity is not record")
+                alogw(TAG(), "topActivity is not record")
             }
         }
 
         override fun onActivityStopped(activity: Activity) {
-            alogi(TAG, "onActivityStopped: ${recodeName(activity)}")
+            alogi(TAG(), "onActivityStopped: ${recodeName(activity)}")
             if (startActivityRecord.first() == recodeName(activity)) {
                 startActivityRecord.removeFirst()
             } else {
-                alogw(TAG, "true is ${startActivityRecord.first()}")
+                alogw(TAG(), "true is ${startActivityRecord.first()}")
             }
         }
 
         override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-            alogi(TAG, "onActivitySaveInstanceState: ${recodeName(activity)}")
+            alogi(TAG(), "onActivitySaveInstanceState: ${recodeName(activity)}")
         }
 
         override fun onActivityDestroyed(activity: Activity) {
-            alogi(TAG, "onActivityDestroyed: ${recodeName(activity)}")
+            alogi(TAG(), "onActivityDestroyed: ${recodeName(activity)}")
             if (createActivityRecord.first() == recodeName(activity)) {
                 createActivityRecord.removeFirst()
             } else {
-                alogw(TAG, "true is ${createActivityRecord.first()}")
+                alogw(TAG(), "true is ${createActivityRecord.first()}")
             }
         }
     }

@@ -10,10 +10,17 @@ import javax.crypto.KeyGenerator
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
 
-/**
- * Created by luyao
- * on 2019/7/1 16:09
- */
+fun main() {
+    val hello = "hello AES"
+    println("origin: ${hello.toByteArray().toHexString()}")
+    val keyByte = initAESKey()
+    println("key: ${keyByte.toHexString()}")
+    val en = hello.toByteArray().aesEncrypt(keyByte)
+    println("en: ${en.toHexString()}")
+    val de = en.aesDecrypt(keyByte)
+    println("de: ${de.toHexString()}")
+    println("de: ${String(de)}")
+}
 
 private const val KEY_ALGORITHM = "AES"
 private const val CIPHER_ALGORITHM_DEFAULT = "AES"
@@ -27,7 +34,7 @@ private const val AES_CFB_NOPADDING = "AES/CFB/NoPadding"
  */
 fun ByteArray.aesEncrypt(
     key: ByteArray,
-    iv: ByteArray? = null,
+    iv: ByteArray = key,
     algorithm: String = AES_CFB_NOPADDING
 ): ByteArray {
     val cipher = initCipher(Cipher.ENCRYPT_MODE, key, iv, algorithm)
@@ -42,7 +49,7 @@ fun ByteArray.aesEncrypt(
  */
 fun ByteArray.aesDecrypt(
     key: ByteArray,
-    iv: ByteArray? = null,
+    iv: ByteArray = key,
     algorithm: String = AES_CFB_NOPADDING
 ): ByteArray {
     val cipher = initCipher(Cipher.DECRYPT_MODE, key, iv, algorithm)

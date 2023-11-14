@@ -33,15 +33,13 @@ fun <T> Any?.notNull(f: () -> T, t: () -> T): T {
     return if (this != null) f() else t()
 }
 
-fun View.dp2px(dp: Int): Int {
-    val scale = resources.displayMetrics.density
-    return (dp * scale + 0.5f).toInt()
+fun <T> Any?.notNull(f: () -> T, t: T): T {
+    return if (this != null) f() else t
 }
 
-fun View.px2dp(px: Int): Int {
-    val scale = resources.displayMetrics.density
-    return (px / scale + 0.5f).toInt()
-}
+fun View.dp2px(dp: Int) = (dp * resources.displayMetrics.density + 0.5f).toInt()
+
+fun View.px2dp(px: Int) = (px / resources.displayMetrics.density + 0.5f).toInt()
 
 /**
  * Sets the [text] on the clipboard

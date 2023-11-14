@@ -8,6 +8,10 @@ fun <T> String?.notNull(f: () -> T, t: () -> T): T {
     return if (isNullOrEmpty()) f() else t()
 }
 
+fun <T> String?.notNull(f: () -> T, t: T): T {
+    return if (isNullOrEmpty()) f() else t
+}
+
 /**
  * whether string only contains digits
  */

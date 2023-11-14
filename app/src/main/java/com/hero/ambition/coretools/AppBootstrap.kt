@@ -6,6 +6,7 @@ import android.app.Application
 import android.content.Context
 import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.hero.base.ext.TAG
 import com.hero.base.log.ALog
 import com.hero.base.log.alogi
 import com.hero.base.manager.ActivityRecord
@@ -16,16 +17,15 @@ import com.permissionx.guolindev.PermissionX
  * 归拢 app 部分事件的启动时机
  */
 object AppBootstrap {
-    private const val TAG = "AppBootstrapLog"
 
     /**
      * 应用刚启动的时候调用
      */
     fun applicationOnCreate(application: Application) {
         initLogger(application)
-        alogi(TAG, "applicationOnCreate")
+        alogi(TAG(), "applicationOnCreate")
         ActivityRecord.register()
-        alogi(TAG, "applicationOnCreate end")
+        alogi(TAG(), "applicationOnCreate end")
     }
 
     private fun initLogger(context: Context) {
@@ -36,9 +36,9 @@ object AppBootstrap {
      * 主页页刚启动的时候调用
      */
     fun mainActivityCreate(activity: Activity) {
-        alogi(TAG, "mainActivityCreate")
+        alogi(TAG(), "mainActivityCreate")
         requestReadPermission(activity)
-        alogi(TAG, "mainActivityCreate end")
+        alogi(TAG(), "mainActivityCreate end")
     }
 
     private fun requestReadPermission(activity: Activity) {

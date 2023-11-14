@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
 import com.hero.ambition.databinding.FragmentHomeBinding
 import com.hero.ambition.ui.BaseFragment
+import com.hero.base.ext.startFileChooser
 import com.hero.base.log.ALog
 
 class HomeFragment : BaseFragment() {
@@ -29,6 +30,7 @@ class HomeFragment : BaseFragment() {
         }
         textView.setOnClickListener{
             ALog.d("11111111111111111")
+            requireActivity().startFileChooser(100,)
         }
         return root
     }

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
-import android.net.ConnectivityManager
 import android.os.Build
 import android.support.annotation.DimenRes
 import android.view.LayoutInflater
@@ -20,8 +19,7 @@ inline val Context.screenHeight get() = resources.displayMetrics.heightPixels
 
 inline val Context.isNetworkAvailable: Boolean
     get() {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        val activeNetworkInfo = connectivityManager?.activeNetworkInfo
         return activeNetworkInfo?.isConnectedOrConnecting ?: false
     }
 

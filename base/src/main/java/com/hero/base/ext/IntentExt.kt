@@ -23,6 +23,7 @@ fun Context.getAppInfoIntent(packageName: String = this.packageName): Intent =
 
 /**
  * Jump to the app info page
+ * context?.goToAppInfoPage("com.android.chrome")
  */
 fun Context.goToAppInfoPage(packageName: String = this.packageName) {
     startActivity(getAppInfoIntent(packageName))
@@ -39,6 +40,7 @@ fun Context.getDateAndTimeIntent(): Intent =
 
 /**
  * Jump to the data and time page
+ * context?.goToDateAndTimePage()
  */
 fun Context.goToDateAndTimePage() {
     startActivity(getDateAndTimeIntent())
@@ -98,6 +100,7 @@ fun Context.installApk(apkFile: File) {
 
 /**
  * Visit the specific url with browser
+ * context?.openBrowser("https://www.baidu.com")
  */
 fun Context.openBrowser(url: String) {
     Intent(Intent.ACTION_VIEW, Uri.parse(url)).run { startActivity(this) }
