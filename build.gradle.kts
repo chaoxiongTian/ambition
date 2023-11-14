@@ -4,3 +4,8 @@ plugins {
     id("org.jetbrains.kotlin.android") version "1.8.0" apply false
     id("com.android.library") version "8.1.0" apply false
 }
+buildscript {
+    dependencies {
+        classpath("com.github.dcendents:android-maven-gradle-plugin:2.1")
+    }
+}
