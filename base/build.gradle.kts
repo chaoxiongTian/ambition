@@ -7,7 +7,7 @@ plugins {
 
 val GROUP_ID = "com.hero.ambition"
 val ARTIFACT_ID = "base-utils"
-val VERSION = "0.0.2"
+val VERSION = "0.0.3"
 
 //val VERSION = latestGitTag().ifEmpty { "0.0.2" }
 
@@ -18,20 +18,34 @@ fun latestGitTag(): String {
     }
 }
 
-publishing { // 发布配置
-    publications { // 发布的内容
-        register<MavenPublication>("release") { // 注册一个名字为 release 的发布内容
-            groupId = GROUP_ID
-            artifactId = ARTIFACT_ID
-            version = VERSION
-
-            afterEvaluate { // 在所有的配置都完成之后执行
-                // 从当前 module 的 release 包中发布
-                from(components["release"])
+afterEvaluate {
+    // 官方建议使用上传方法
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            register<MavenPublication>("release") {
+                groupId = GROUP_ID //groupId 随便取 , 这个是依赖库的组 id
+                artifactId = ARTIFACT_ID  //artifactId 随便取 , 依赖库的名称（jitpack 都不会使用到）
+                version = VERSION // 当前版本依赖库版本号，这个jitpack不会使用到，只是我们开发者自己查看
             }
         }
     }
 }
+
+//publishing { // 发布配置
+//    publications { // 发布的内容
+//        register<MavenPublication>("release") { // 注册一个名字为 release 的发布内容
+//            groupId = GROUP_ID
+//            artifactId = ARTIFACT_ID
+//            version = VERSION
+//
+//            afterEvaluate { // 在所有的配置都完成之后执行
+//                // 从当前 module 的 release 包中发布
+//                from(components["release"])
+//            }
+//        }
+//    }
+//}
 
 android {
     namespace = "com.hero.base"
