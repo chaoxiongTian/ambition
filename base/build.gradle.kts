@@ -8,6 +8,7 @@ plugins {
 val GROUP_ID = "com.hero.ambition"
 val ARTIFACT_ID = "base-utils"
 val VERSION = "0.0.2"
+
 //val VERSION = latestGitTag().ifEmpty { "0.0.2" }
 
 fun latestGitTag(): String {
