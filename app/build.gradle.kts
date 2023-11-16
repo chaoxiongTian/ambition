@@ -59,7 +59,6 @@ dependencies {
     // ThirdPart
     implementation("com.guolindev.permissionx:permissionx:${Version.permissionx}")
     implementation("com.orhanobut:logger:${Version.logger}")
-    implementation("com.github.tamsiree.RxTool:RxKit:2.6.3")
 
     // Test
     testImplementation("junit:junit:${Version.junit}")
