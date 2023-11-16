@@ -8,20 +8,22 @@ import com.hero.base.app
 import com.permissionx.guolindev.PermissionX
 
 @SuppressLint("InlinedApi")
-fun Context.sdCardPermission() = (targetSDk() >= Build.VERSION_CODES.TIRAMISU).then(
+fun Context.sdCardPermission() = (useNewSDPermission()).then(
     arrayListOf(
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.READ_MEDIA_AUDIO,
         Manifest.permission.READ_MEDIA_VIDEO
-    ), arrayListOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+    ), arrayListOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 )
 
 @SuppressLint("InlinedApi")
-fun Context.sdCardPermissionStatus() = (targetSDk() >= Build.VERSION_CODES.TIRAMISU).then({
+fun Context.sdCardPermissionStatus() = (useNewSDPermission()).then({
     "granted status, image: ${PermissionX.isGranted(app(), Manifest.permission.READ_MEDIA_IMAGES)}, " +
             "audio: ${PermissionX.isGranted(app(), Manifest.permission.READ_MEDIA_AUDIO)}, " +
             "video: ${PermissionX.isGranted(app(), Manifest.permission.READ_MEDIA_VIDEO)}"
 }, {
-    "granted status, isGranted: ${PermissionX.isGranted(app(), Manifest.permission.READ_EXTERNAL_STORAGE)}"
+    "granted status, isGranted: ${PermissionX.isGranted(app(), Manifest.permission.WRITE_EXTERNAL_STORAGE)}"
 })
+
+private fun Context.useNewSDPermission() = targetSDk() >= Build.VERSION_CODES.TIRAMISU && fromT()
 
