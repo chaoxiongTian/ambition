@@ -84,7 +84,7 @@ object ALog {
     }
 
     fun d(tag: String, message: String, vararg args: Any) {
-        Logger.t(tag).d(tag, message, args)
+        Logger.t(tag).d(message, args)
     }
 
     fun d(message: Any) {

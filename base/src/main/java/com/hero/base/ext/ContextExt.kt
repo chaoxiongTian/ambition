@@ -67,6 +67,13 @@ fun Context.getAppVersionCode(): Long {
     return 0L
 }
 
+fun Context.targetSDk() = try {
+    packageManager.getApplicationInfo(this.packageName, 0).targetSdkVersion
+} catch (e: PackageManager.NameNotFoundException) {
+    e.printStackTrace()
+    0
+}
+
 
 data class ExtAppInfo(
     val apkPath: String,

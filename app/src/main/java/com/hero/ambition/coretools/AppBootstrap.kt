@@ -1,12 +1,13 @@
 package com.hero.ambition.coretools
 
-import android.Manifest
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
+import com.hero.base.app
 import com.hero.base.ext.TAG
+import com.hero.base.ext.debugToast
+import com.hero.base.ext.sdCardPermission
 import com.hero.base.log.ALog
 import com.hero.base.log.alogi
 import com.hero.base.manager.ActivityRecord
@@ -46,14 +47,11 @@ object AppBootstrap {
             return
         }
         PermissionX.init(activity)
-            .permissions(Manifest.permission.READ_EXTERNAL_STORAGE)
-            .request { allGranted, _, deniedList ->
-                if (allGranted) {
-                    Toast.makeText(activity, "All permissions are granted", Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(activity, "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
-                }
+            .permissions(activity.applicationContext.sdCardPermission())
+            .request { allGranted, grantedList, deniedList ->
+                val notice = "allGranted $allGranted, grantedList:$grantedList deniedList:$deniedList"
+                alogi(TAG(), notice)
+                debugToast(app(), notice)
             }
     }
-
 }

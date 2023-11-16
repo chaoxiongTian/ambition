@@ -34,7 +34,7 @@ val File.mimeType: String
  * @param isRecursive whether to list recursively
  * @param filter exclude some files
  */
-fun File.listFiles(
+fun File.listSubFiles(
     isRecursive: Boolean = false,
     filter: ((file: File) -> Boolean)? = null
 ): Array<out File> {

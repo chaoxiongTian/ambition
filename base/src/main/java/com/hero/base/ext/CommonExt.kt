@@ -26,8 +26,13 @@ fun fromO() = fromSpecificVersion(Build.VERSION_CODES.O)
 fun beforeO() = beforeSpecificVersion(Build.VERSION_CODES.O)
 fun fromP() = fromSpecificVersion(Build.VERSION_CODES.P)
 fun beforeP() = beforeSpecificVersion(Build.VERSION_CODES.P)
+fun fromQ() = fromSpecificVersion(Build.VERSION_CODES.Q)
+fun beforeQ() = beforeSpecificVersion(Build.VERSION_CODES.Q)
+fun fromT() = fromSpecificVersion(Build.VERSION_CODES.TIRAMISU)
+fun beforeT() = beforeSpecificVersion(Build.VERSION_CODES.TIRAMISU)
 fun fromSpecificVersion(version: Int): Boolean = Build.VERSION.SDK_INT >= version
 fun beforeSpecificVersion(version: Int): Boolean = Build.VERSION.SDK_INT < version
+fun buildVersion() = Build.VERSION.SDK_INT
 
 fun <T> Any?.notNull(f: () -> T, t: () -> T): T {
     return if (this != null) f() else t()

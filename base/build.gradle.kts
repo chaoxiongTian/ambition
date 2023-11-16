@@ -90,6 +90,7 @@ dependencies {
     // ThirdPart
     implementation("com.orhanobut:logger:${Version.logger}")
     implementation("com.google.code.gson:gson:${Version.gson}")
+    implementation("com.guolindev.permissionx:permissionx:${Version.permissionx}")
 
     // Test
     testImplementation("junit:junit:${Version.junit}")
