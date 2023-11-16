@@ -21,44 +21,41 @@ import java.io.IOException
 /**
  * fun to be easy to use.
  */
-fun alogd(message: String) = ALog.d(message)
+fun alogd(message: Any?) = ALog.d(message)
 
-fun alogd(tag: String, message: String) = ALog.d(tag, message)
+fun alogd(tag: String, message: Any?) = ALog.d(tag, message)
 
-fun alogd(message: Any) = ALog.d(message)
+fun aloge(message: String?) = ALog.e(message)
 
-fun alogd(tag: String, message: Any) = ALog.d(tag, message)
+fun aloge(tag: String, message: String?) = ALog.e(tag, message)
 
-fun aloge(message: String) = ALog.e(message)
+fun aloge(throwable: Throwable, message: String?) = ALog.e(throwable, message)
 
-fun aloge(tag: String, message: String) = ALog.e(tag, message)
+fun aloge(tag: String, throwable: Throwable, message: String?) = ALog.e(tag, throwable, message)
 
-fun aloge(throwable: Throwable, message: String) = ALog.e(throwable, message)
+fun alogw(message: String?) = ALog.w(message)
 
-fun aloge(tag: String, throwable: Throwable, message: String) = ALog.e(tag, throwable, message)
-fun alogw(message: String) = ALog.w(message)
+fun alogw(tag: String, message: String?) = ALog.w(tag, message)
 
-fun alogw(tag: String, message: String) = ALog.w(tag, message)
+fun alogi(message: String?) = ALog.i(message)
 
-fun alogi(message: String) = ALog.i(message)
+fun alogi(tag: String, message: String?) = ALog.i(tag, message)
 
-fun alogi(tag: String, message: String) = ALog.i(tag, message)
+fun alogv(message: String?) = ALog.v(message)
 
-fun alogv(message: String) = ALog.v(message)
+fun alogv(tag: String, message: String?) = ALog.v(tag, message)
 
-fun alogv(tag: String, message: String) = ALog.v(tag, message)
+fun alogwtf(message: String?) = ALog.wtf(message)
 
-fun alogwtf(message: String) = ALog.wtf(message)
+fun alogwtf(tag: String, message: String?) = ALog.wtf(tag, message)
 
-fun alogwtf(tag: String, message: String) = ALog.wtf(tag, message)
+fun alogjson(json: String?) = ALog.json(json)
 
-fun alogjson(json: String) = ALog.json(json)
+fun alogjson(tag: String, json: String?) = ALog.json(tag, json)
 
-fun alogjson(tag: String, json: String) = ALog.json(tag, json)
+fun alogxml(xml: String?) = ALog.xml(xml)
 
-fun alogxml(xml: String) = ALog.xml(xml)
-
-fun alogxml(tag: String, xml: String) = ALog.xml(tag, xml)
+fun alogxml(tag: String, xml: String?) = ALog.xml(tag, xml)
 
 /**
  * logger warp, to hide true implementation.
@@ -66,6 +63,8 @@ fun alogxml(tag: String, xml: String) = ALog.xml(tag, xml)
 object ALog {
 
     private const val GLOBAL_TAG = "a-log"
+    private const val NULL_LOG_MES = "null_log_mes"
+    private const val NULL_LOG_OBJ = "null_log_Obj"
     fun init(context: Context) {
         val formatStrategy: FormatStrategy = PrettyFormatStrategy.newBuilder()
             .showThreadInfo(false) // (Optional) Whether to show thread info or not. Default true
@@ -79,84 +78,76 @@ object ALog {
         Logger.addLogAdapter(DiskLogAdapter(build.build()))
     }
 
-    fun d(message: String, vararg args: Any) {
-        Logger.d(message, args)
+
+    private fun adjustMessage(message: String?): String = message ?: NULL_LOG_MES
+    private fun adjustObjMessage(message: Any?): Any = message ?: NULL_LOG_OBJ
+
+    fun d(message: Any?) = Logger.d(adjustObjMessage(message))
+
+    fun d(tag: String, message: Any?) = Logger.t(tag).d(adjustObjMessage(message))
+
+    fun e(message: String?) {
+        Logger.e(adjustMessage(message))
     }
 
-    fun d(tag: String, message: String, vararg args: Any) {
-        Logger.t(tag).d(message, args)
+    fun e(tag: String, message: String?) {
+        Logger.t(tag).e(adjustMessage(message))
     }
 
-    fun d(message: Any) {
-        Logger.d(message)
+    fun e(throwable: Throwable, message: String?) {
+        Logger.e(throwable, adjustMessage(message))
     }
 
-    fun d(tag: String, message: Any) {
-        Logger.t(tag).d(message)
+    fun e(tag: String, throwable: Throwable, message: String?) {
+        Logger.t(tag).e(throwable, adjustMessage(message))
     }
 
-    fun e(message: String, vararg args: Any) {
-        Logger.e(message, args)
+    fun w(message: String?) {
+        Logger.w(adjustMessage(message))
     }
 
-    fun e(tag: String, message: String, vararg args: Any) {
-        Logger.t(tag).e(message, args)
+    fun w(tag: String, message: String?) {
+        Logger.t(tag).w(adjustMessage(message))
     }
 
-    fun e(throwable: Throwable, message: String, vararg args: Any) {
-        Logger.e(throwable, message, args)
+    fun i(message: String?) {
+        Logger.i(adjustMessage(message))
     }
 
-    fun e(tag: String, throwable: Throwable, message: String, vararg args: Any) {
-        Logger.t(tag).e(throwable, message, args)
+    fun i(tag: String, message: String?) {
+        Logger.t(tag).i(adjustMessage(message))
     }
 
-    fun w(message: String, vararg args: Any) {
-        Logger.w(message, args)
+    fun v(message: String?) {
+        Logger.v(adjustMessage(message))
     }
 
-    fun w(tag: String, message: String, vararg args: Any) {
-        Logger.t(tag).w(message, args)
+    fun v(tag: String, message: String?) {
+        Logger.t(tag).v(adjustMessage(message))
     }
 
-    fun i(message: String, vararg args: Any) {
-        Logger.i(message, args)
+    fun wtf(message: String?) {
+        Logger.wtf(adjustMessage(message))
     }
 
-    fun i(tag: String, message: String, vararg args: Any) {
-        Logger.t(tag).t(tag).i(message, args)
+    fun wtf(tag: String, message: String?) {
+        Logger.t(tag).wtf(adjustMessage(message))
     }
 
-    fun v(message: String, vararg args: Any) {
-        Logger.v(message, args)
+    fun json(json: String?) {
+        Logger.json(adjustMessage(json))
     }
 
-    fun v(tag: String, message: String, vararg args: Any) {
-        Logger.t(tag).v(message, args)
+    fun json(tag: String, json: String?) {
+        Logger.t(tag).json(adjustMessage(json))
     }
 
-    fun wtf(message: String, vararg args: Any) {
-        Logger.wtf(message, args)
+    fun xml(xml: String?) {
+        Logger.xml(adjustMessage(xml))
     }
 
-    fun wtf(tag: String, message: String, vararg args: Any) {
-        Logger.t(tag).wtf(message, args)
-    }
-
-    fun json(json: String) {
-        Logger.json(json)
-    }
-
-    fun json(tag: String, json: String) {
-        Logger.t(tag).json(json)
-    }
-
-    fun xml(xml: String) {
-        Logger.xml(xml)
-    }
-
-    fun xml(tag: String, xml: String) {
-        Logger.t(tag).xml(xml)
+    fun xml(tag: String, xml: String?) {
+        Logger.t(tag).xml(adjustMessage(xml))
     }
 }
 

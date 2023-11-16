@@ -34,14 +34,6 @@ fun fromSpecificVersion(version: Int): Boolean = Build.VERSION.SDK_INT >= versio
 fun beforeSpecificVersion(version: Int): Boolean = Build.VERSION.SDK_INT < version
 fun buildVersion() = Build.VERSION.SDK_INT
 
-fun <T> Any?.notNull(f: () -> T, t: () -> T): T {
-    return if (this != null) f() else t()
-}
-
-fun <T> Any?.notNull(f: () -> T, t: T): T {
-    return if (this != null) f() else t
-}
-
 fun View.dp2px(dp: Int) = (dp * resources.displayMetrics.density + 0.5f).toInt()
 
 fun View.px2dp(px: Int) = (px / resources.displayMetrics.density + 0.5f).toInt()
