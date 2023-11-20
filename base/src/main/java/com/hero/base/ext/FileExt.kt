@@ -3,6 +3,7 @@ package com.hero.base.ext
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.charset.Charset
 import java.text.DecimalFormat
@@ -216,3 +217,60 @@ fun copyFolder(sourceFolder: File, destFolder: File, overwrite: Boolean, func: (
         }
     }
 }
+
+/**
+ * 使用 RandomAccess 来取文件中的关键位置的点.
+ */
+fun File.keyValue(): String {
+    if (length() < 20) {
+        return hash(Hash.SHA256)
+    }
+    val raf = RandomAccessFile(this, "r")
+    val positionArray = arrayOf(
+        (length() / 8 * 1),
+        (length() / 8 * 2),
+        (length() / 8 * 3),
+        (length() / 8 * 4),
+        (length() / 8 * 5),
+        (length() / 8 * 6),
+        (length() / 8 * 7),
+    )
+    val buffer = StringBuilder()
+    positionArray.forEach {
+        raf.seek(it)
+        buffer.append(raf.readInt())
+    }
+    raf.close()
+    return buffer.toString()
+}
+
+data class FileCoreInfo(
+    val name: String,
+    val size: Long,
+    val path: String,
+    val keyValue: String,
+    val mimeType: String,
+    val extension: String
+) {
+    fun changeKeyValue(newKeyValue: String) = FileCoreInfo(
+        name = this.name,
+        size = this.size,
+        path = this.path,
+        keyValue = newKeyValue,
+        mimeType = this.mimeType,
+        extension = this.extension,
+    )
+    override fun toString() = "name: $name, " +
+            "size: $size " +
+            "extension: $extension" +
+            "keyValue: $keyValue"
+}
+
+fun File.extractCoreInfos() = FileCoreInfo(
+    name = this.name,
+    size = length(),
+    path = this.absolutePath,
+    keyValue = keyValue(),
+    extension = (extension == "").then("other", extension),
+    mimeType = mimeType,
+)
