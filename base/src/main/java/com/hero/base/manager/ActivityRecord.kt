@@ -7,8 +7,8 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.hero.base.app
 import com.hero.base.ext.TAG
-import com.hero.base.log.alogi
-import com.hero.base.log.alogw
+import com.hero.base.ext.alogi
+import com.hero.base.ext.alogw
 
 /**
  * it is used to hold key activity and collect statistics on activity.

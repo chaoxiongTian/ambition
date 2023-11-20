@@ -6,10 +6,10 @@ import android.content.Context
 import androidx.fragment.app.FragmentActivity
 import com.hero.base.app
 import com.hero.base.ext.TAG
+import com.hero.base.ext.alogi
 import com.hero.base.ext.debugToast
 import com.hero.base.ext.sdCardPermission
 import com.hero.base.log.ALog
-import com.hero.base.log.alogi
 import com.hero.base.manager.ActivityRecord
 import com.permissionx.guolindev.PermissionX
 
