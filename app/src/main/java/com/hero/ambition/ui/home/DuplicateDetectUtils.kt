@@ -3,10 +3,10 @@ package com.hero.ambition.ui.home
 import com.hero.base.ext.FileCoreInfo
 import com.hero.base.ext.Hash
 import com.hero.base.ext.TAG
+import com.hero.base.ext.alogd
 import com.hero.base.ext.extractCoreInfos
 import com.hero.base.ext.hash
 import com.hero.base.ext.then
-import com.hero.base.log.alogd
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -27,64 +27,30 @@ object DuplicateDetectUtils {
         var result: MutableMap<String, MutableMap<String, MutableList<FileCoreInfo>>>
         withContext(Dispatchers.IO) {
             val cost = measureTimeMillis {
-                result = findDetection(files, true)
+                result = findDetection(files, needVerify = false, needLog = true)
             }
-            alogd("DuplicateFileLog", "整体花费: $cost")
+            alogd("DuplicateDetectUtils", "整体花费: $cost")
         }
         return result
     }
 
     /**
-     * files 文件列表,
+     * files: 文件列表,
      * needVerify: 是否需要非常精确, 如果需要的话, 对于文件抽点算出的再次进行 hash 计算.
-     * 返回值: <类型, <相同文件的 sha-256, 相同文件列表<FileCoreInfo>>>
+     * 返回值: <类型, <相同文件的 keyValue, 相同文件列表<FileCoreInfo>>>
      */
-    private suspend fun findDetection(files: MutableList<File>, needVerify: Boolean):
+    private suspend fun findDetection(files: MutableList<File>, needVerify: Boolean, needLog: Boolean = false):
             MutableMap<String, MutableMap<String, MutableList<FileCoreInfo>>> {
-        alogd(TAG(), "sublist size: ${files.size}")
-        // files<File> -> fileCores<FileCoreInfo> - doing
-        val fileCores = mutableListOf<FileCoreInfo>()
-        files.forEach {
-            if (it.isFile) {
-                fileCores.add(it.extractCoreInfos())
-            }
-        }
-        alogd(TAG(), "sublist is file size: ${files.size}")
-        // 粗整理 -> <keyValue, List<FileCoreInfo>>
-        val fileCoresP1 = mutableMapOf<String, MutableList<FileCoreInfo>>()
-        // 重复的数据
-        val fileCoresP2 = mutableMapOf<String, MutableList<FileCoreInfo>>()
-        fileCores.forEach {
-            (fileCoresP1.containsKey(it.keyValue)).then({
-                fileCoresP1[it.keyValue]!!.add(it)
-            }, {
-                fileCoresP1[it.keyValue] = mutableListOf(it)
-            })
-            (fileCoresP1[it.keyValue]!!.size > 1).then {
-                fileCoresP2[it.keyValue] = fileCoresP1[it.keyValue]!!
-            }
-        }
-        alogd(TAG(), "粗整理 ${fileCoresP2.size}")
-        fileCoresP2.entries.forEachIndexed { index, entry ->
-            entry.value.forEachIndexed { indexInside, it ->
-                alogd(TAG(), "$index - $indexInside , $it")
-            }
-        }
-        var fileCoresP3: MutableMap<String, MutableList<FileCoreInfo>>
-        coroutineScope {
-            // SHA-256 校验.
-            fileCoresP3 = if (needVerify) {
-                // 通过协程将所有的 keyValue 改为 sha-256
-                convertAccuracyKeyValue(fileCoresP2)
-            } else {
-                fileCoresP2
-            }
-        }
-        // <mimeType, <keyValue, <FileCoreInfo>>>
-        alogd(TAG(), "待按照类别排序")
-        // <类型, <相同文件的 sha-256, 相同文件列表<FileCoreInfo>>>
+        // 2. <mimeType, <keyValue, <FileCoreInfo>>>
+        val trimmedFlatFileCores = trimFileCoresWithKeyValue(file2FileCores(files), needVerify, needLog)
+        // 3. <类型, <相同文件的 sha-256, 相同文件列表<FileCoreInfo>>>
+        return typeClassFileCores(trimmedFlatFileCores, needLog)
+    }
+
+    private fun typeClassFileCores(fileCores: MutableMap<String, MutableList<FileCoreInfo>>, needLog: Boolean):
+            MutableMap<String, MutableMap<String, MutableList<FileCoreInfo>>> {
         val result = mutableMapOf<String, MutableMap<String, MutableList<FileCoreInfo>>>()
-        fileCoresP3.entries.forEach {
+        fileCores.entries.forEach {
             val firstValue = it.value.first()
             if (result.containsKey(firstValue.extension)) {
                 result[firstValue.extension]!![it.key] = it.value
@@ -94,8 +60,58 @@ object DuplicateDetectUtils {
                 }
             }
         }
-        alogd(TAG(), "最后结果")
-        result.entries.forEach { typeEntry ->
+        logTypeClassFileCores(result, needLog, "最后结果")
+        return result
+    }
+
+    /**
+     * 通过 FileCoreInfo.keyValue 字段, 过滤 MutableList<FileCoreInfo> 列表.
+     * 找出重复的 FileCoreInfo, 并按照 MutableMap<String, MutableList<FileCoreInfo>> 形式返回.
+     */
+    private suspend fun trimFileCoresWithKeyValue(
+        fileCores: MutableList<FileCoreInfo>,
+        needVerify: Boolean,
+        needLog: Boolean
+    ): MutableMap<String, MutableList<FileCoreInfo>> {
+        // 粗整理 -> <keyValue, List<FileCoreInfo>>
+        val flatFileCores = flatFileCores(fileCores)
+        logFileCores(flatFileCores, needLog, "粗整理: ${flatFileCores.size}")
+        // 精确整理需要加上 hash 值
+        val accurateFileCores: MutableMap<String, MutableList<FileCoreInfo>> = if (needVerify) {
+            convertAccuracyKeyValue(flatFileCores)
+        } else {
+            flatFileCores
+        }
+        logFileCores(accurateFileCores, needLog, "sha-256 精确后: ${accurateFileCores.size}")
+        return accurateFileCores
+    }
+
+    private fun logFileCores(
+        fileCores: MutableMap<String, MutableList<FileCoreInfo>>,
+        needLog: Boolean,
+        notice: String
+    ) {
+        if (!needLog) {
+            return
+        }
+        alogd(TAG(), notice)
+        fileCores.entries.forEachIndexed { index, entry ->
+            entry.value.forEachIndexed { indexInside, it ->
+                alogd(TAG(), "$index - $indexInside , $it")
+            }
+        }
+    }
+
+    private fun logTypeClassFileCores(
+        fileCores: MutableMap<String, MutableMap<String, MutableList<FileCoreInfo>>>,
+        needLog: Boolean,
+        notice: String
+    ) {
+        if (!needLog) {
+            return
+        }
+        alogd(TAG(), notice)
+        fileCores.entries.forEach { typeEntry ->
             alogd(TAG(), "类型: ${typeEntry.key}, 有${typeEntry.value.size} 个")
             typeEntry.value.entries.forEachIndexed { index, entry ->
                 entry.value.forEachIndexed { indexInside, it ->
@@ -103,45 +119,61 @@ object DuplicateDetectUtils {
                 }
             }
         }
-        return result
+    }
+
+    private fun file2FileCores(files: MutableList<File>): MutableList<FileCoreInfo> {
+        val fileCores = mutableListOf<FileCoreInfo>()
+        files.forEach {
+            if (it.isFile) {
+                fileCores.add(it.extractCoreInfos())
+            }
+        }
+        return fileCores
     }
 
     /**
      * 如果需要精细化处理, 需要按照 sha256 在过滤一次
+     * 将 keyValue 改为 hash_keyValue
      */
-    private suspend fun convertAccuracyKeyValue(map: MutableMap<String, MutableList<FileCoreInfo>>): MutableMap<String, MutableList<FileCoreInfo>> {
+    private suspend fun convertAccuracyKeyValue(map: MutableMap<String, MutableList<FileCoreInfo>>):
+            MutableMap<String, MutableList<FileCoreInfo>> = flatFileCores(addKeyValueHashValue(map))
+
+    /**
+     * 从 MutableList<FileCoreInfo> 中找出 key 重复多次的数据,
+     * 并转为 MutableMap<String, MutableList<FileCoreInfo>>
+     */
+    private fun flatFileCores(fileCores: MutableList<FileCoreInfo>):
+            MutableMap<String, MutableList<FileCoreInfo>> {
+        val fileCoresP = mutableMapOf<String, MutableList<FileCoreInfo>>()
+        // 重复的数据
+        val result = mutableMapOf<String, MutableList<FileCoreInfo>>()
+        fileCores.forEach {
+            (fileCoresP.containsKey(it.keyValue)).then({
+                fileCoresP[it.keyValue]!!.add(it)
+            }, {
+                fileCoresP[it.keyValue] = mutableListOf(it)
+            })
+            (fileCoresP[it.keyValue]!!.size > 1).then {
+                result[it.keyValue] = fileCoresP[it.keyValue]!!
+            }
+        }
+        return result
+    }
+
+    private suspend fun addKeyValueHashValue(map: MutableMap<String, MutableList<FileCoreInfo>>):
+            MutableList<FileCoreInfo> {
         val fileCores = mutableListOf<FileCoreInfo>()
         coroutineScope {
             val asyncTasks = ArrayList<Deferred<Any>>()
             map.entries.forEach { entries ->
                 entries.value.forEach {
                     asyncTasks.add(async {
-                        fileCores.add(it.changeKeyValue(File(it.path).hash(Hash.SHA256)))
+                        fileCores.add(it.changeKeyValue(it.keyValue + "_" + File(it.path).hash(Hash.SHA256)))
                     })
                 }
             }
             asyncTasks.awaitAll()
         }
-        // 粗整理 -> <keyValue, <FileCoreInfo>>
-        val fileCoresP1 = mutableMapOf<String, MutableList<FileCoreInfo>>()
-        // 重复的数据
-        val fileCoresP2 = mutableMapOf<String, MutableList<FileCoreInfo>>()
-        fileCores.forEach {
-            (fileCoresP1.containsKey(it.keyValue)).then({
-                fileCoresP1[it.keyValue]!!.add(it)
-            }, {
-                fileCoresP1[it.keyValue] = mutableListOf(it)
-            })
-            (fileCoresP1[it.keyValue]!!.size > 1).then {
-                fileCoresP2[it.keyValue] = fileCoresP1[it.keyValue]!!
-            }
-        }
-        alogd(TAG(), "sha-256 精确后 ${fileCoresP2.size}")
-        fileCoresP2.entries.forEachIndexed { index, entry ->
-            entry.value.forEachIndexed { indexInside, it ->
-                alogd(TAG(), "$index - $indexInside , $it")
-            }
-        }
-        return fileCoresP2
+        return fileCores
     }
 }
