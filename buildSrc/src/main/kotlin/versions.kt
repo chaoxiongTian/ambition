@@ -2,6 +2,12 @@
  * 存放三方库的版本信息
  */
 object Version {
+
+    //AGP
+    const val AGP = "8.1.0"
+    //Kotlin
+    const val kotlin = "1.8.0"
+
     //base
     const val compileSdk = 34
     const val minSdk = 22
