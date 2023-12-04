@@ -16,3 +16,4 @@ local.properties
 /.idea/
 /buildSrc/build/
 /buildSrc/.gradle/
+/app/release/
